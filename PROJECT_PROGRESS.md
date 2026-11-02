@@ -8,7 +8,7 @@
 
 ```mermaid
 flowchart TD
-    A[Main: 設定關鍵字與候選網站] --> B[Facade: runSearchRanking]
+    A[Main: 設定關鍵字並讓使用者輸入候選網站] --> B[Facade: runSearchRanking]
     B --> C[SearchKeywordCommand: 執行搜尋與建樹]
     C --> D[HtmlHandler: 抓取、清理文字、找子連結]
     C --> E[Keyword 與 Node: 儲存頁面資料及統計]
@@ -29,11 +29,11 @@ flowchart TD
 | `SearchKeywordCommand` | `smartranking.command` | 主要流程控制器：清空舊結果、逐站抓頁、統計關鍵字、建立 Tree，最後呼叫 Manager 排名。 |
 | `BoManager` | `smartranking.manager` | 管理網站 Tree 清單，計算總分並依分數降冪排序。 |
 | `Facade` | `smartranking.facade` | 提供單一入口 `runSearchRanking()`，內部建立並執行搜尋命令；以 Singleton 方式提供共用實例。 |
-| `Main` | `smartranking` | 設定關鍵字、權重與候選網站，呼叫 Facade，並印出排名和各頁面統計。 |
+| `Main` | `smartranking` | 設定關鍵字與權重，讓使用者輸入候選網站 URL，呼叫 Facade，並印出排名和各頁面統計。 |
 
 ## 執行流程
 
-1. `Main` 建立關鍵字規則及候選網站名稱與 URL。
+1. `Main` 建立關鍵字規則，並讓使用者逐行輸入候選網站 URL；輸入空行後開始分析。
 2. `Main` 呼叫 `Facade.runSearchRanking()`。
 3. Facade 建立 `SearchKeywordCommand` 並呼叫 `execute()`。
 4. Command 清空 Manager 舊資料，對每個網站抓取根頁 HTML。
@@ -58,19 +58,3 @@ flowchart TD
 ```
 
 因此目前直接子頁貢獻一半分數；若未來建立更深層的頁面樹，每多一層會再乘一次 `0.5`。`Tree.compareTo()` 讓分數高的網站排在前面。
-
-## 目前完成狀態
-
-- 已完成核心資料模型、HTML 處理、搜尋命令、結果管理、Facade 與主程式整合。
-- 已使用 JDK 21 的 `javac --release 8` 編譯全部來源；輸出的 `Main.class` major version 為 52，能由 Java 21 執行。
-- 專案有 `pom.xml`，但目前環境未安裝 Maven，因此尚未以 `mvn package` 驗證。
-- 主程式會對 `Main` 設定的候選網站發出實際網路請求；目前沒有自動化測試或離線假資料流程。
-
-## 已知限制與後續可做項目
-
-- `extractSubLinks()` 目前只辨識 `http://` 或 `https://` 絕對連結，尚未解析相對連結；程式註解提到相對連結，但目前實作沒有支援。
-- 同站判斷使用 `link.contains(baseDomain)`，不是解析 URL 後比對完整主機名稱，可能納入網址字串中剛好包含網域文字的連結。
-- HTML 清理以正規表示式移除標籤，未解碼 HTML entity，也未處理 JavaScript 動態載入的內容；遇到不同編碼或特殊頁面時統計可能不完整。
-- 關鍵字以不區分大小寫的子字串方式計數，不會依詞界或語意判斷；英文關鍵字可能計入更長單字中的部分字串。
-- 每站目前只分析根頁及最多兩個子頁，且網路失敗時只輸出警告並以空內容繼續。
-- 建議下一階段補上離線測試資料，覆蓋關鍵字計數、子樹衰減、排序及 HTML 連結解析，再視需求改善 URL 解析與錯誤處理。
