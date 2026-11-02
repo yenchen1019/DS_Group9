@@ -89,7 +89,7 @@ public class Main {
             int orig = root.getOriginalRank();
             String move = orig == 0 ? "" : (orig > rank ? "↑" + (orig - rank) : orig < rank ? "↓" + (rank - orig) : "—");
             System.out.printf("#%-2d 總分 %7.1f   原排名 #%-2d %s   %d 個網頁%n",
-                    rank, t.getScore(), orig, move, t.size());
+                                       rank, Ranker.adjustedScore(t), orig, move, t.size());
             System.out.println("    " + Tree.shorten(root.getTitle().isEmpty() ? "(無標題)" : root.getTitle(), 70));
             System.out.println("    " + root.getUrl());
             if (!root.getSnippet().isEmpty()) System.out.println("    摘要：" + Tree.shorten(root.getSnippet(), 90));

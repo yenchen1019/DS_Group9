@@ -47,10 +47,28 @@ public class QueryProcessor {
      * 實際送給搜尋 API 的字串。若使用者沒有輸入核心詞，自動補上「電影」，
      * 這樣輸入「狗」或「郁方」時，候選網頁才會偏向電影相關。
      */
+        /**
+     * 實際送給搜尋 API 的字串。
+     * - 有核心詞（例如「電影」）：照原樣搜尋
+     * - 看起來像人名（只有一個 2～4 字的中文查詢詞，或英文姓名）：補「電影作品 主演」
+     * - 其他：補「電影」
+     */
     public String buildSearchQuery(String input, List<Keyword> keywords) {
         String q = normalize(input);
         boolean hasCore = keywords.stream().anyMatch(k -> k.getCategory() == KeywordCategory.CORE);
-        return hasCore ? q : q + " 電影";
+        if (hasCore) return q;
+        if (looksLikePersonName(keywords)) return q + " 電影作品 主演";
+        return q + " 電影";
+    }
+
+    /** 粗略判斷是不是人名：只有一個沒命中字典的查詢詞，且是 2～4 個中文字或英文姓名 */
+    private static boolean looksLikePersonName(List<Keyword> keywords) {
+        if (keywords.size() != 1) return false;
+        Keyword k = keywords.get(0);
+        if (k.getCategory() != KeywordCategory.QUERY) return false;
+        String name = k.getName();
+        return name.matches("[\\u4e00-\\u9fff]{2,4}")
+                || name.matches("[A-Za-z]+( [A-Za-z]+)+");
     }
 
     /** 基本文字處理：全形轉半形、合併空白 */
