@@ -1,0 +1,16 @@
+# 複製成 config.properties 後填入金鑰（config.properties 已加入 .gitignore，不會被 commit）
+# 三選一即可；也可以改用同名的環境變數。
+
+# --- Google Custom Search JSON API ---
+# GOOGLE_API_KEY=你的 API key
+# GOOGLE_CSE_ID=你的搜尋引擎 ID (cx)
+
+# --- Brave Search API ---
+# BRAVE_API_KEY=你的 key
+
+# --- SerpAPI ---
+# SERPAPI_KEY=你的 key
+
+# 強制指定來源：GOOGLE / BRAVE / SERPAPI / SEEDS（不填則自動判斷）
+# SEARCH_PROVIDER=GOOGLE
+# SEEDS_FILE=seeds.txt

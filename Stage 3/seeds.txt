@@ -1,0 +1,8 @@
+# 離線/無金鑰模式用的候選網頁清單（模擬搜尋 API 回傳的結果）
+# 格式：網址 | 標題 | 摘要   （標題與摘要可省略）
+# 設定好 GOOGLE_API_KEY 等金鑰後，程式會改用搜尋 API，不再讀這個檔案。
+https://zh.wikipedia.org/zh-tw/狗 | 狗 - 維基百科 | 狗是家養的肉食目犬科動物
+https://zh.wikipedia.org/zh-tw/忠犬小八 | 忠犬小八 - 維基百科 | 2009 年美國電影
+https://zh.wikipedia.org/zh-tw/狗狗的旅程 | 狗狗的旅程 - 維基百科 | 2017 年美國電影
+https://zh.wikipedia.org/zh-tw/101忠狗 | 101忠狗 - 維基百科 | 迪士尼動畫電影
+https://en.wikipedia.org/wiki/Dog | Dog - Wikipedia | The dog is a domesticated descendant of the wolf
