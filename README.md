@@ -48,7 +48,7 @@
 依照分數重新排序
         ↓
 呈現搜尋結果
-ˋˋˋtext
+ˋˋˋ
 
 ## 評分機制（Scoring Mechanism）
 
